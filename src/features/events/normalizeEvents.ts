@@ -3,8 +3,8 @@ import {
   ALLOWED_IMPACTS,
   ALLOWED_SYMBOLS,
 } from "@/features/events/constants";
+import type { AssetSymbol } from "@/features/assets";
 import type {
-  AssetSymbol,
   EventCategory,
   EventImpact,
   RiskEvent,

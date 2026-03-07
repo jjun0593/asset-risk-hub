@@ -25,9 +25,8 @@ import {
 import { INTERVALS } from "@/lib/constants/intervals";
 import { SYMBOLS } from "@/lib/constants/symbols";
 
+import type { AssetSymbol, ChartInterval } from "@/features/assets";
 import type {
-  AssetSymbol,
-  ChartInterval,
   EventCategory,
   EventImpact,
   RiskEvent,
@@ -294,8 +293,8 @@ export default function AssetRiskHub() {
               onClick={resetFilters}
               disabled={!isFilterDirty}
               className={`rounded-lg border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${isFilterDirty
-                  ? "border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100"
-                  : "cursor-not-allowed border-slate-800 bg-slate-900/40 text-slate-600"
+                ? "border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100"
+                : "cursor-not-allowed border-slate-800 bg-slate-900/40 text-slate-600"
                 }`}
             >
               Reset Filters

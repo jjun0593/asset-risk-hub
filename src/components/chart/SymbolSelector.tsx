@@ -1,6 +1,6 @@
 "use client";
 
-import type { AssetSymbol } from "@/features/events/types";
+import type { AssetSymbol } from "@/features/assets";
 
 type Props = {
     value: AssetSymbol;

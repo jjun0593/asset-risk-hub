@@ -5,12 +5,8 @@ import {
 } from "@/features/events/constants";
 import { INTERVALS } from "@/lib/constants/intervals";
 
-import type {
-  AssetSymbol,
-  ChartInterval,
-  EventCategory,
-  EventImpact,
-} from "@/features/events/types";
+import type { AssetSymbol, ChartInterval } from "@/features/assets";
+import type { EventCategory, EventImpact } from "@/features/events/types";
 
 export type ImpactFilter = "all" | EventImpact;
 export type CategoryFilter = "all" | EventCategory;

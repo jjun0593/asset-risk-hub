@@ -1,9 +1,4 @@
-import type { AssetSymbol } from "@/features/events/types";
+import { getSymbolsByClass } from "@/features/assets";
+import type { AssetSymbol } from "@/features/assets";
 
-export const SYMBOLS: AssetSymbol[] = [
-  "BTCUSDT",
-  "ETHUSDT",
-  "SOLUSDT",
-  "XRPUSDT",
-  "SUIUSDT",
-];
+export const SYMBOLS: AssetSymbol[] = getSymbolsByClass("crypto");

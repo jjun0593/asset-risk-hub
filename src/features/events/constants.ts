@@ -1,8 +1,5 @@
-import type {
-  AssetSymbol,
-  EventCategory,
-  EventImpact,
-} from "@/features/events/types";
+import type { AssetSymbol } from "@/features/assets";
+import type { EventCategory, EventImpact } from "@/features/events/types";
 
 export const ALLOWED_SYMBOLS: AssetSymbol[] = [
   "BTCUSDT",

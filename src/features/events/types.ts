@@ -1,3 +1,5 @@
+import type { AssetSymbol, ChartInterval } from "@/features/assets";
+
 export type EventImpact = "low" | "medium" | "high";
 
 export type EventCategory =
@@ -11,14 +13,7 @@ export type EventCategory =
   | "upgrade"
   | "other";
 
-export type AssetSymbol =
-  | "BTCUSDT"
-  | "ETHUSDT"
-  | "SOLUSDT"
-  | "XRPUSDT"
-  | "SUIUSDT";
-
-export type ChartInterval = "1m" | "3m" | "5m" | "15m" | "1h" | "4h" | "1d";
+export type { ChartInterval };
 
 export interface RiskEvent {
   id: string;

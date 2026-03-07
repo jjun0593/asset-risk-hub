@@ -6,8 +6,8 @@ import {
   ALLOWED_SYMBOLS,
 } from "@/features/events/constants";
 import { fetchEvents } from "@/features/events/fetchEvents";
+import type { AssetSymbol } from "@/features/assets";
 import type {
-  AssetSymbol,
   EventCategory,
   EventImpact,
   RiskEvent,
