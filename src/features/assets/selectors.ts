@@ -1,3 +1,4 @@
+import { ASSET_CLASSES } from "./types";
 import {
   DEFAULT_ASSET_CLASS,
   DEFAULT_SYMBOL_BY_ASSET_CLASS,
@@ -7,6 +8,10 @@ import type { AssetClass, AssetMetadata, AssetSymbol } from "./types";
 
 export function getAllAssets(): AssetMetadata[] {
   return assetList;
+}
+
+export function getAllAssetClasses(): AssetClass[] {
+  return [...ASSET_CLASSES];
 }
 
 export function getAssetBySymbol(symbol: AssetSymbol): AssetMetadata {
@@ -28,7 +33,7 @@ export function getDefaultAssetClass(): AssetClass {
 export function getDefaultSymbolByAssetClass(
   assetClass: AssetClass,
 ): AssetSymbol {
-  return DEFAULT_SYMBOL_BY_ASSET_CLASS[assetClass] as AssetSymbol;
+  return DEFAULT_SYMBOL_BY_ASSET_CLASS[assetClass];
 }
 
 export function getAssetClassBySymbol(symbol: AssetSymbol): AssetClass {

@@ -2,9 +2,6 @@ import { ASSET_CLASS_LABELS } from "./constants";
 import type { AssetMetadata, AssetRegistry } from "./types";
 
 export const assetRegistry: AssetRegistry = {
-  // -------------------------
-  // Crypto
-  // -------------------------
   BTCUSDT: {
     symbol: "BTCUSDT",
     label: "Bitcoin",
@@ -62,9 +59,6 @@ export const assetRegistry: AssetRegistry = {
     tags: ["sui"],
   },
 
-  // -------------------------
-  // US Market
-  // -------------------------
   QQQ: {
     symbol: "QQQ",
     label: "Invesco QQQ",
@@ -122,9 +116,6 @@ export const assetRegistry: AssetRegistry = {
     tags: ["stock", "mega-cap", "ai"],
   },
 
-  // -------------------------
-  // Korea Market
-  // -------------------------
   KOSPI: {
     symbol: "KOSPI",
     label: "KOSPI",
@@ -171,9 +162,6 @@ export const assetRegistry: AssetRegistry = {
     tags: ["stock", "korea", "semiconductor"],
   },
 
-  // -------------------------
-  // Metals
-  // -------------------------
   XAUUSD: {
     symbol: "XAUUSD",
     label: "Gold",
@@ -198,9 +186,6 @@ export const assetRegistry: AssetRegistry = {
     tags: ["silver", "precious-metals"],
   },
 
-  // -------------------------
-  // FX
-  // -------------------------
   USDKRW: {
     symbol: "USDKRW",
     label: "USD/KRW",

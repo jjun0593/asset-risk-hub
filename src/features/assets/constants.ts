@@ -1,4 +1,4 @@
-import type { AssetClass } from "./types";
+import type { AssetClass, AssetSymbol } from "./types";
 
 export const ASSET_CLASS_LABELS: Record<AssetClass, string> = {
   crypto: "Crypto",
@@ -10,7 +10,7 @@ export const ASSET_CLASS_LABELS: Record<AssetClass, string> = {
 
 export const DEFAULT_ASSET_CLASS: AssetClass = "crypto";
 
-export const DEFAULT_SYMBOL_BY_ASSET_CLASS: Record<AssetClass, string> = {
+export const DEFAULT_SYMBOL_BY_ASSET_CLASS: Record<AssetClass, AssetSymbol> = {
   crypto: "BTCUSDT",
   us: "QQQ",
   kr: "KOSPI",

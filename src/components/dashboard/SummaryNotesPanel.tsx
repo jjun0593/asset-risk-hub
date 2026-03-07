@@ -6,11 +6,8 @@ import { getUpcomingEventsBySymbol } from "@/features/events/lib/getUpcomingEven
 import { formatCountdown } from "@/features/events/lib/formatCountdown";
 import { formatUtc } from "@/lib/utils/formatUtc";
 
-import type {
-    AssetSymbol,
-    ChartInterval,
-    RiskEvent,
-} from "@/features/events/types";
+import type { AssetSymbol, ChartInterval } from "@/features/assets";
+import type { RiskEvent } from "@/features/events/types";
 
 type Props = {
     symbol: AssetSymbol;

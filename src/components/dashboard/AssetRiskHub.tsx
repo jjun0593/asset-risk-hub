@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import AssetClassSelector from "@/components/chart/AssetClassSelector";
 import CandleChart from "@/components/chart/CandleChart";
 import IntervalSelector from "@/components/chart/IntervalSelector";
 import SymbolSelector from "@/components/chart/SymbolSelector";
@@ -11,6 +12,13 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import EventRiskPanel from "@/components/dashboard/EventRiskPanel";
 import SummaryNotesPanel from "@/components/dashboard/SummaryNotesPanel";
 
+import {
+  getAllAssetClasses,
+  getAssetClassBySymbol,
+  getDefaultAssetClass,
+  getDefaultSymbolByAssetClass,
+  getSymbolsByClass,
+} from "@/features/assets";
 import {
   ALLOWED_CATEGORIES,
   ALLOWED_IMPACTS,
@@ -23,9 +31,8 @@ import {
   parseSymbol,
 } from "@/features/events/parseEventFilters";
 import { INTERVALS } from "@/lib/constants/intervals";
-import { SYMBOLS } from "@/lib/constants/symbols";
 
-import type { AssetSymbol, ChartInterval } from "@/features/assets";
+import type { AssetClass, AssetSymbol, ChartInterval } from "@/features/assets";
 import type {
   EventCategory,
   EventImpact,
@@ -94,7 +101,16 @@ export default function AssetRiskHub() {
   const initialCategory = searchParams.get("category");
   const initialImpact = searchParams.get("impact");
 
-  const [symbol, setSymbol] = useState<AssetSymbol>(parseSymbol(initialSymbol));
+  const parsedInitialSymbol = parseSymbol(initialSymbol);
+
+  const [symbol, setSymbol] = useState<AssetSymbol>(parsedInitialSymbol);
+  const [assetClass, setAssetClass] = useState<AssetClass>(() => {
+    try {
+      return getAssetClassBySymbol(parsedInitialSymbol);
+    } catch {
+      return getDefaultAssetClass();
+    }
+  });
   const [interval, setInterval] = useState<ChartInterval>(
     parseInterval(initialInterval)
   );
@@ -109,6 +125,12 @@ export default function AssetRiskHub() {
 
   const isFilterDirty = categoryFilter !== "all" || impactFilter !== "all";
   const categories: CategoryFilter[] = ["all", ...ALLOWED_CATEGORIES];
+
+  const assetClassItems = useMemo(() => getAllAssetClasses(), []);
+  const symbolItems = useMemo<AssetSymbol[]>(
+    () => getSymbolsByClass(assetClass),
+    [assetClass]
+  );
 
   useEffect(() => {
     let ignore = false;
@@ -192,6 +214,16 @@ export default function AssetRiskHub() {
     setImpactFilter("all");
   }
 
+  function handleAssetClassChange(nextAssetClass: AssetClass) {
+    setAssetClass(nextAssetClass);
+    setSymbol(getDefaultSymbolByAssetClass(nextAssetClass));
+  }
+
+  function handleSymbolChange(nextSymbol: AssetSymbol) {
+    setSymbol(nextSymbol);
+    setAssetClass(getAssetClassBySymbol(nextSymbol));
+  }
+
   return (
     <main className="flex min-h-screen flex-col gap-4 bg-slate-950 p-4 text-slate-100">
       <DashboardHeader symbol={symbol} interval={interval} events={events} />
@@ -199,6 +231,9 @@ export default function AssetRiskHub() {
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-800 bg-slate-900/40 px-4 py-2 text-xs text-slate-300">
         <div className="flex flex-wrap items-center gap-2">
           <span className="font-semibold text-slate-100">{symbol}</span>
+          <span className="text-slate-500">•</span>
+
+          <span>{assetClass}</span>
           <span className="text-slate-500">•</span>
 
           <span>{interval}</span>
@@ -273,7 +308,17 @@ export default function AssetRiskHub() {
 
       <div className="flex flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900/60 px-4 py-3">
         <div className="flex flex-wrap items-center gap-4">
-          <SymbolSelector value={symbol} onChange={setSymbol} items={SYMBOLS} />
+          <AssetClassSelector
+            value={assetClass}
+            onChange={handleAssetClassChange}
+            items={assetClassItems}
+          />
+
+          <SymbolSelector
+            value={symbol}
+            onChange={handleSymbolChange}
+            items={symbolItems}
+          />
 
           <IntervalSelector
             value={interval}
@@ -293,8 +338,8 @@ export default function AssetRiskHub() {
               onClick={resetFilters}
               disabled={!isFilterDirty}
               className={`rounded-lg border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide transition ${isFilterDirty
-                ? "border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100"
-                : "cursor-not-allowed border-slate-800 bg-slate-900/40 text-slate-600"
+                  ? "border-slate-700 bg-slate-900/60 text-slate-300 hover:bg-slate-800/80 hover:text-slate-100"
+                  : "cursor-not-allowed border-slate-800 bg-slate-900/40 text-slate-600"
                 }`}
             >
               Reset Filters

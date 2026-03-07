@@ -60,47 +60,12 @@ export type AssetMetadata = {
   symbol: AssetSymbol;
   label: string;
   assetClass: AssetClass;
-
-  /**
-   * Human-readable group label for future UI display.
-   * Example: "Crypto", "US Market", "Korea", "Metals", "FX"
-   */
   groupLabel: string;
-
-  /**
-   * Optional display / data-fetch routing hints.
-   * This lets us add class-specific fetchers later without changing selector logic.
-   */
   marketDataProvider: MarketDataProvider;
-
-  /**
-   * Future-friendly alias for external provider mapping.
-   * Example:
-   * - Binance symbol: BTCUSDT
-   * - Yahoo ticker: NVDA, AAPL
-   * - Korea proxy/index symbol, etc.
-   */
   providerSymbol?: string;
-
-  /**
-   * Price display / normalization helpers for later use.
-   * Not used yet by the existing chart logic unless you wire them in.
-   */
   pricePrecision?: number;
-
-  /**
-   * Optional ordering control within the selector.
-   */
   order: number;
-
-  /**
-   * Used by selector UIs and future route defaults.
-   */
   isDefault?: boolean;
-
-  /**
-   * Optional tags for filtering / extension later.
-   */
   tags?: string[];
 };
 
