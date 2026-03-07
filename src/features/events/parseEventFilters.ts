@@ -1,17 +1,16 @@
 import {
   ALLOWED_CATEGORIES,
   ALLOWED_IMPACTS,
-  ALLOWED_SYMBOLS,
 } from "@/features/events/constants";
 import { INTERVALS } from "@/lib/constants/intervals";
 
+import { getDefaultSymbolByAssetClass, isAssetSymbol } from "@/features/assets";
 import type { AssetSymbol, ChartInterval } from "@/features/assets";
 import type { EventCategory, EventImpact } from "@/features/events/types";
 
 export type ImpactFilter = "all" | EventImpact;
 export type CategoryFilter = "all" | EventCategory;
 
-const VALID_SYMBOLS = new Set<AssetSymbol>(ALLOWED_SYMBOLS);
 const VALID_INTERVALS = new Set<ChartInterval>(INTERVALS);
 const VALID_IMPACTS = new Set<ImpactFilter>(["all", ...ALLOWED_IMPACTS]);
 const VALID_CATEGORIES = new Set<CategoryFilter>([
@@ -20,7 +19,7 @@ const VALID_CATEGORIES = new Set<CategoryFilter>([
 ]);
 
 export function isValidSymbol(value: string | null): value is AssetSymbol {
-  return Boolean(value && VALID_SYMBOLS.has(value as AssetSymbol));
+  return Boolean(value && isAssetSymbol(value));
 }
 
 export function isValidInterval(value: string | null): value is ChartInterval {
@@ -36,7 +35,7 @@ export function isValidCategory(value: string | null): value is CategoryFilter {
 }
 
 export function parseSymbol(value: string | null): AssetSymbol {
-  return isValidSymbol(value) ? value : "BTCUSDT";
+  return isValidSymbol(value) ? value : getDefaultSymbolByAssetClass("crypto");
 }
 
 export function parseInterval(value: string | null): ChartInterval {
