@@ -1,10 +1,4 @@
-import type {
-  AssetSymbol,
-  ChartInterval,
-  MarketDataProvider,
-} from "@/features/assets";
-
-export type KlineResponseItem = {
+export type Candle = {
   time: number;
   open: number;
   high: number;
@@ -12,13 +6,13 @@ export type KlineResponseItem = {
   close: number;
 };
 
-export type KlinesResult = {
-  candles: KlineResponseItem[];
-  meta: {
-    symbol: AssetSymbol;
-    interval: ChartInterval;
-    provider: MarketDataProvider;
-    supported: boolean;
-    reason?: string;
-  };
+export type MarketDataMeta = {
+  supported: boolean;
+  reason?: string;
+};
+
+export type KlinesApiResponse = {
+  candles: Candle[];
+  provider: string | null;
+  meta: MarketDataMeta;
 };

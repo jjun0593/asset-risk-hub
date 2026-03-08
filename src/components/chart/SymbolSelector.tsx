@@ -1,6 +1,6 @@
 "use client";
 
-import type { AssetSymbol } from "@/features/assets";
+import { getAssetBySymbol, type AssetSymbol } from "@/features/assets";
 
 type Props = {
     value: AssetSymbol;
@@ -16,13 +16,17 @@ export default function SymbolSelector({ value, onChange, items }: Props) {
             <select
                 value={value}
                 onChange={(e) => onChange(e.target.value as AssetSymbol)}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 outline-none focus:border-slate-500"
+                className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-sm text-slate-100 outline-none transition-colors focus:border-slate-500"
             >
-                {items.map((symbol) => (
-                    <option key={symbol} value={symbol}>
-                        {symbol}
-                    </option>
-                ))}
+                {items.map((symbol) => {
+                    const asset = getAssetBySymbol(symbol);
+
+                    return (
+                        <option key={symbol} value={symbol}>
+                            {asset.label}
+                        </option>
+                    );
+                })}
             </select>
         </div>
     );

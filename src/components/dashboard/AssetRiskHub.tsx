@@ -17,9 +17,12 @@ import type { RiskEvent } from "@/features/events/types";
 
 import {
   ASSET_CLASSES,
-  CHART_INTERVALS,
+  getAssetBySymbol,
+  getDefaultIntervalByAssetClass,
   getDefaultSymbolByAssetClass,
+  getIntervalsByAssetClass,
   getSymbolsByClass,
+  isIntervalAllowedForAssetClass,
   type AssetClass,
   type AssetSymbol,
   type ChartInterval,
@@ -28,14 +31,15 @@ import {
 import { useKlines } from "@/features/market/useKlines";
 
 const DEFAULT_ASSET_CLASS: AssetClass = "crypto";
-const DEFAULT_INTERVAL: ChartInterval = "1h";
 
 export default function AssetRiskHub() {
   const [assetClass, setAssetClass] = useState<AssetClass>(DEFAULT_ASSET_CLASS);
   const [symbol, setSymbol] = useState<AssetSymbol>(
-    getDefaultSymbolByAssetClass(DEFAULT_ASSET_CLASS)
+    getDefaultSymbolByAssetClass(DEFAULT_ASSET_CLASS),
   );
-  const [interval, setInterval] = useState<ChartInterval>(DEFAULT_INTERVAL);
+  const [interval, setInterval] = useState<ChartInterval>(
+    getDefaultIntervalByAssetClass(DEFAULT_ASSET_CLASS),
+  );
 
   const normalizedEvents: RiskEvent[] = useMemo(() => {
     return normalizeEvents(mockEvents);
@@ -44,6 +48,14 @@ export default function AssetRiskHub() {
   const symbolOptions = useMemo(() => {
     return getSymbolsByClass(assetClass);
   }, [assetClass]);
+
+  const intervalOptions = useMemo(() => {
+    return getIntervalsByAssetClass(assetClass);
+  }, [assetClass]);
+
+  const asset = useMemo(() => {
+    return getAssetBySymbol(symbol);
+  }, [symbol]);
 
   const nonCryptoProbeEnabled = assetClass !== "crypto";
 
@@ -62,6 +74,11 @@ export default function AssetRiskHub() {
     setAssetClass(nextAssetClass);
 
     const nextSymbols = getSymbolsByClass(nextAssetClass);
+    const nextInterval = isIntervalAllowedForAssetClass(nextAssetClass, interval)
+      ? interval
+      : getDefaultIntervalByAssetClass(nextAssetClass);
+
+    setInterval(nextInterval);
 
     if (!nextSymbols.includes(symbol)) {
       setSymbol(getDefaultSymbolByAssetClass(nextAssetClass));
@@ -83,6 +100,9 @@ export default function AssetRiskHub() {
     probeCandles.length === 0 &&
     probeMeta.supported === false;
 
+  const providerStatus: "live" | "pending" =
+    assetClass === "crypto" ? "live" : "pending";
+
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-6 md:px-6">
@@ -90,6 +110,8 @@ export default function AssetRiskHub() {
           symbol={symbol}
           interval={interval}
           events={normalizedEvents}
+          providerName={asset.marketDataProvider}
+          providerStatus={providerStatus}
         />
 
         <section className="grid gap-4 rounded-2xl border border-zinc-800 bg-zinc-900/60 p-4 md:grid-cols-3">
@@ -106,7 +128,7 @@ export default function AssetRiskHub() {
           />
 
           <IntervalSelector
-            items={[...CHART_INTERVALS]}
+            items={intervalOptions}
             value={interval}
             onChange={handleIntervalChange}
           />
@@ -118,6 +140,7 @@ export default function AssetRiskHub() {
               <UnsupportedMarketNotice
                 symbol={symbol}
                 reason={probeMeta.reason}
+                providerName={asset.marketDataProvider}
               />
             ) : (
               <CandleChart

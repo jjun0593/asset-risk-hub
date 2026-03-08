@@ -1,10 +1,17 @@
 import { ASSET_CLASSES } from "./types";
 import {
   DEFAULT_ASSET_CLASS,
+  DEFAULT_INTERVAL_BY_ASSET_CLASS,
   DEFAULT_SYMBOL_BY_ASSET_CLASS,
+  INTERVALS_BY_ASSET_CLASS,
 } from "./constants";
 import { assetList, assetRegistry } from "./registry";
-import type { AssetClass, AssetMetadata, AssetSymbol } from "./types";
+import type {
+  AssetClass,
+  AssetMetadata,
+  AssetSymbol,
+  ChartInterval,
+} from "./types";
 
 export function getAllAssets(): AssetMetadata[] {
   return assetList;
@@ -49,4 +56,23 @@ export function getDefaultAssetByClass(assetClass: AssetClass): AssetMetadata {
   }
 
   return assetRegistry[getDefaultSymbolByAssetClass(assetClass)];
+}
+
+export function getIntervalsByAssetClass(
+  assetClass: AssetClass,
+): ChartInterval[] {
+  return [...INTERVALS_BY_ASSET_CLASS[assetClass]];
+}
+
+export function getDefaultIntervalByAssetClass(
+  assetClass: AssetClass,
+): ChartInterval {
+  return DEFAULT_INTERVAL_BY_ASSET_CLASS[assetClass];
+}
+
+export function isIntervalAllowedForAssetClass(
+  assetClass: AssetClass,
+  interval: ChartInterval,
+): boolean {
+  return INTERVALS_BY_ASSET_CLASS[assetClass].includes(interval);
 }
